@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
 
 df = pd.read_csv('listings.csv', sep=',')
 #Scores Outputs
@@ -45,46 +43,3 @@ df = pd.read_csv('reviews.csv', sep=',')
 reviews_listing_id = df.iloc[:,0]
 reviews_date = df.iloc[:,2]
 reviews_comments = df.iloc[:,5]
-
-#kNN Regression model for location scores
-x1 = listings_longitude
-x2 = listings_latitude
-y = scores_location
-for i in range(len(listings_number_of_reviews)):
-    if listings_number_of_reviews[i] == 0:
-        x1.pop(i)
-        x2.pop(i)
-        y.pop(i)
-
-#y = y.to_numpy()
-X=np.column_stack((x1,x2))
-
-"""
-fig = plt.figure()
-ax = fig.add_subplot(111,projection='3d')
-ax.scatter(X[:,0],X[:,1],y)
-ax.set_xlabel('X1')
-ax.set_ylabel('X2')
-ax.set_zlabel('Y')
-plt.show()
-"""
-#from sklearn.model_selection import train_test_split
-#X_train, X_test, y_train, y_test = train_test_split(X,y,shuffle=True)
-print("Hi")
-from sklearn.linear_model import LinearRegression
-model = LinearRegression().fit(X,y)
-#Prediction
-ypred = model.predict(X)
-print(ypred)
-print(y)
-
-#Scatter plot of listing ratings
-"""plt.rc('font', size=10)
-plt.xlabel('Listings numbered'); plt.ylabel('Score rating')
-plt.title('Scatter plot of listing ratings')
-plt.rcParams['figure.constrained_layout.use'] = True
-plt.scatter(list(range(0, num_listings)),scores_rating, color='green', s=2)
-plt.show()"""
-
-
-

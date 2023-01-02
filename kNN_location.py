@@ -2,29 +2,24 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-import math
 import data
 
 #kNN Regression model for location scores
 x1 = data.listings_longitude
 x2 = data.listings_latitude
 y = data.scores_location
-for i in range(len(data.scores_location)):
-    if math.isnan(data.scores_location[i]):
-        x1.pop(i)
-        x2.pop(i)
-        y.pop(i)
 
-y = y.to_numpy()
-X=np.column_stack((x1,x2))
-
+inputs,outputs = data.pop_nans((x1,x2),y)
+y = outputs.to_numpy()
+X=np.column_stack((inputs[0],inputs[1]))
 
 fig = plt.figure()
 ax = fig.add_subplot(111,projection='3d')
 ax.scatter(X[:,0],X[:,1],y)
-ax.set_xlabel('X1')
-ax.set_ylabel('X2')
-ax.set_zlabel('Y')
+ax.set_title('Location Rating vs Listing Coordinates')
+ax.set_xlabel('Logitude')
+ax.set_ylabel('Latitude')
+ax.set_zlabel('Location Rating')
 plt.show()
 
 from sklearn.model_selection import train_test_split

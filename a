@@ -1,3 +1,18 @@
-//import python file into python file?
+//Using a set in python?
+s = set()
+s.add([10])
+
+
+s = set([[10]])
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import math
 
 df = pd.read_csv('listings.csv', sep=',')
 #Scores Outputs
@@ -37,9 +38,22 @@ listings_amenities = df.iloc[:,39] #List of strings e.g. ["Oven", "Free Parking"
 listings_price = df.iloc[:,40] #Dollars $
 listings_number_of_reviews = df.iloc[:,56] #Integer indicating the number of reviews written for the listing
 
+set_of_something = set()
+for i in listings_neighbourhood:
+    set_of_something.add(i)
+#print(set_of_something)
+#print(len(set_of_something))
 
 #Reviews
 df = pd.read_csv('reviews.csv', sep=',')
 reviews_listing_id = df.iloc[:,0]
 reviews_date = df.iloc[:,2]
 reviews_comments = df.iloc[:,5]
+
+def pop_nans(inputs,outputs):
+    for i in range(len(outputs)):
+        if math.isnan(outputs[i]):
+            for input in inputs:
+                input.pop(i)
+            outputs.pop(i)
+    return inputs,outputs

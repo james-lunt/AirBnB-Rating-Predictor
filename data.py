@@ -38,11 +38,11 @@ listings_amenities = df.iloc[:,39] #List of strings e.g. ["Oven", "Free Parking"
 listings_price = df.iloc[:,40] #Dollars $
 listings_number_of_reviews = df.iloc[:,56] #Integer indicating the number of reviews written for the listing
 
-set_of_something = set()
-for i in listings_neighbourhood:
-    set_of_something.add(i)
-#print(set_of_something)
-#print(len(set_of_something))
+def make_set(feature):
+    set_of_something = set()
+    for i in feature:
+        set_of_something.add(i)
+    return set_of_something, len(set_of_something)
 
 #Reviews
 df = pd.read_csv('reviews.csv', sep=',')
@@ -50,10 +50,23 @@ reviews_listing_id = df.iloc[:,0]
 reviews_date = df.iloc[:,2]
 reviews_comments = df.iloc[:,5]
 
+#Takes list of inputs and output
 def pop_nans(inputs,outputs):
-    for i in range(len(outputs)):
+    for i in outputs.keys():
         if math.isnan(outputs[i]):
             for input in inputs:
                 input.pop(i)
             outputs.pop(i)
+
+    for input in inputs:
+        for i in input.keys():
+            try:
+                if math.isnan(input[i]):
+                    for input1 in inputs:
+                        input1.pop(i)
+                    outputs.pop(i)
+            except:
+                continue
     return inputs,outputs
+
+            

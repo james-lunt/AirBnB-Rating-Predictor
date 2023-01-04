@@ -29,6 +29,5 @@ def plot_3d(x1,x2 ,rating, x1label,x2label,ylabel,rating_title):
     ax.set_zlabel(ylabel)
     plt.show()
 
-plot_ratings(data.scores_rating, "Overall")
 #plot_threed(data.listings_host_response_rate,data.listings_host_response_time,data.scores_communication, "Communication rating vs Response time & Response rate")
 #plot_ratings(data.scores_checkin, "checkin")

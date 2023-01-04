@@ -3,6 +3,7 @@ import statistics
 from collections import defaultdict
 import numpy as np
 import pandas as pd
+import ratings_plot
 np.set_printoptions(threshold=None)
 import math
 
@@ -10,6 +11,7 @@ import math
 x, y = data.pop_nans_y([data.listings_number_of_reviews,data.listings_host_is_superhost, data.listings_neighbourhood,
                       data.listings_amenities,data.listings_accommodates,data.listings_bedrooms,
                       data.listings_beds,data.listings_price],data.scores_rating)
+print(data.scores_rating)
 
 
 def normalise_values(data_points):
@@ -32,7 +34,6 @@ for key in is_superhost.keys():
 
 #Calculate sentiment of neigbourhood by averaging location ratings
 #Use neighbourhoods cleansed as neighbourhood feature vector is missing alot of features
-#neighbourhoods, location_ratings = data.pop_nans([data.listings_neighbourhood_cleansed],data.scores_location)
 location_ratings = data.scores_location
 neighbourhoods = x[2]
 #Replace NaNs with cleansed location as cleansed is never NaN
@@ -84,40 +85,25 @@ for i in value_inputs[4].keys():
 for i in value_inputs[0].keys():
     value_inputs[0][i] = value_inputs[0][i].count(',')
 
-#Convert N/A bedrooms to 1.5 the number it accommodates
+#Convert N/A bedrooms to the ration of accommodation
+ratio_acc = (value_inputs[1]/value_inputs[3]).mean()
 for key in value_inputs[3].keys():
     if math.isnan(value_inputs[3][key]):
-        value_inputs[3][key] = value_inputs[1][key]/1.5
+        value_inputs[3][key] = ratio_acc
 
-#Convert N/A beds to 1.5 the number of bedrooms
+#Convert N/A beds to ration of beds
+ratio_bed = (value_inputs[3]/value_inputs[2]).mean()
 for key in value_inputs[2].keys():
     if math.isnan(value_inputs[2][key]):
-        value_inputs[2][key] = value_inputs[3][key]/1.5
+        value_inputs[2][key] = ratio_bed
 
 
 #If price, value will be smaller
 value_sentiment = (value_inputs[0] + value_inputs[1] + value_inputs[2] + value_inputs[3])/value_inputs[4]
 value_sentiment = normalise_values(value_sentiment)
 
-print(value_sentiment)
-print(is_superhost)
-print(reviews_num)
-print(neighbourhoods)
-
-X=np.column_stack((is_superhost*reviews_num,value_sentiment*reviews_num,neighbourhoods*reviews_num))
-#X = np.array([[is_superhost*reviews_num],[ranked_neighbourhoods*reviews_num],[value_sentiment*reviews_num]])
-
-
-from sklearn.linear_model import LinearRegression
-
-model = LinearRegression()
-model.fit(X, y)
-
-print(model.intercept_)
-print(model.coef_)
-
-"""
-    for j in neighbourhoods.keys():
-        if i == neighbourhoods[j]:
-            neighbourhoods[j] = neighbourhood_ranking[i]"
-"""
+#(value_sentiment*reviews_num).to_csv('value.csv',index=False)
+#(is_superhost*reviews_num).to_csv('superhost.csv',index=False)
+#(reviews_num*reviews_num).to_csv('reviews_num.csv',index=False)
+#(neighbourhoods*reviews_num).to_csv('neighbourhoods.csv',index=False)
+#y.to_csv('rating.csv',index=False)

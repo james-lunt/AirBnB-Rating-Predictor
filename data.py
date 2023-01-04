@@ -26,6 +26,7 @@ listings_host_response_time = df.iloc[:,15] #Label string e.g, 'Within an hour'
 listings_host_response_rate = df.iloc[:,16] #Percentage
 listings_host_is_superhost = df.iloc[:,18] #Boolean probably read as a String either 't' or 'f'
 listings_neighbourhood = df.iloc[:,27] #Label string e.g. 'Dun Laoghaire'
+listings_neighbourhood_cleansed = df.iloc[:,28] #Label string e.g. 'Dun Laoghaire'
 listings_longitude = df.iloc[:,30] #Longitude Latitude tuple e.g. (53.29178, -6.25792)
 listings_latitude = df.iloc[:,31] 
 listings_property_type = df.iloc[:,32] #Label string e.g. 'Private room in bungalow'
@@ -68,5 +69,12 @@ def pop_nans(inputs,outputs):
             except:
                 continue
     return inputs,outputs
+
+def pop_nans_y(outputs):
+    for i in outputs.keys():
+        if math.isnan(outputs[i]):
+            outputs.pop(i)
+    return outputs
+
 
             

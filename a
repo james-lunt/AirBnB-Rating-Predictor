@@ -1,43 +1,4 @@
-//Python find average of float array?
-l = [15, 18, 2, 36, 12, 78, 5, 6, 9]
-
-import statistics
-statistics.mean(l)  # = 20.11111111111111
-
-
-sum(l) / len(l)
-
-
-sum(l) / float(len(l))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//Create pandas dataframe given array of keys and array of values in python?
+out = pd.Series(d).explode()
 
 

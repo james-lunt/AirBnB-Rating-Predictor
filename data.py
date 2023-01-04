@@ -70,11 +70,13 @@ def pop_nans(inputs,outputs):
                 continue
     return inputs,outputs
 
-def pop_nans_y(outputs):
+def pop_nans_y(inputs,outputs):
     for i in outputs.keys():
         if math.isnan(outputs[i]):
+            for input in inputs:
+                input.pop(i)
             outputs.pop(i)
-    return outputs
+    return inputs,outputs
 
 
             

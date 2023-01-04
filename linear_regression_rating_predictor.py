@@ -7,7 +7,7 @@ np.set_printoptions(threshold=None)
 import math
 
 #Need to pop all inputs with no review score
-x, y = data.pop_nans([data.listings_number_of_reviews,data.listings_host_is_superhost, data.listings_neighbourhood_cleansed,
+x, y = data.pop_nans_y([data.listings_number_of_reviews,data.listings_host_is_superhost, data.listings_neighbourhood,
                       data.listings_amenities,data.listings_accommodates,data.listings_bedrooms,
                       data.listings_beds,data.listings_price],data.scores_rating)
 
@@ -19,7 +19,7 @@ def normalise_values(data_points):
 
 #Number of reviews for weighting
 #Also gets rid of inputs with 0 reviews
-reviews_num = x[0]
+reviews_num = x[0].astype("object")
 reviews_num = normalise_values(reviews_num)
 
 #Superhost statuses
@@ -35,6 +35,16 @@ for key in is_superhost.keys():
 #neighbourhoods, location_ratings = data.pop_nans([data.listings_neighbourhood_cleansed],data.scores_location)
 location_ratings = data.scores_location
 neighbourhoods = x[2]
+#Replace NaNs with cleansed location as cleansed is never NaN
+neighbourhoods_cleansed = data.listings_neighbourhood_cleansed
+for key in neighbourhoods.keys():
+    #print(neighbourhoods[key])
+    try:
+        if math.isnan(neighbourhoods[key]):
+            neighbourhoods[key] = neighbourhoods_cleansed[key]
+    except:
+        continue
+
 neighbourhood_ranking = defaultdict(list)
 
 for key in neighbourhoods.keys():
@@ -44,7 +54,7 @@ for key in neighbourhoods.keys():
 for neighbourhood, ratings in neighbourhood_ranking.items():
     av_rating = statistics.mean(ratings)
     neighbourhood_ranking[neighbourhood] = av_rating
-print(neighbourhood_ranking)
+#print(neighbourhood_ranking)
 
 for key in neighbourhood_ranking.keys():
     neighbourhood_ranking[key] = (neighbourhood_ranking[key] - min(neighbourhood_ranking.values())) / (max(neighbourhood_ranking.values()) - min(neighbourhood_ranking.values()))
@@ -55,6 +65,10 @@ for i in neighbourhood_ranking.keys():
         if i == neighbourhoods[j]:
             neighbourhoods[j] = neighbourhood_ranking[i]
 
+#A few outliers due to mispelling or something? Set to min value
+for i in neighbourhoods.keys():
+    if isinstance(neighbourhoods[i],str):
+        neighbourhoods[i] = min(neighbourhood_ranking.values())
 #Unseen Item will be assigned ranking given the neighbourhood
 
 #Value based on combined metrics
@@ -85,7 +99,12 @@ for key in value_inputs[2].keys():
 value_sentiment = (value_inputs[0] + value_inputs[1] + value_inputs[2] + value_inputs[3])/value_inputs[4]
 value_sentiment = normalise_values(value_sentiment)
 
-"""X=np.column_stack((is_superhost*reviews_num,value_sentiment*reviews_num,neighbourhoods*reviews_num))
+print(value_sentiment)
+print(is_superhost)
+print(reviews_num)
+print(neighbourhoods)
+
+X=np.column_stack((is_superhost*reviews_num,value_sentiment*reviews_num,neighbourhoods*reviews_num))
 #X = np.array([[is_superhost*reviews_num],[ranked_neighbourhoods*reviews_num],[value_sentiment*reviews_num]])
 
 
@@ -95,7 +114,7 @@ model = LinearRegression()
 model.fit(X, y)
 
 print(model.intercept_)
-print(model.coef_)"""
+print(model.coef_)
 
 """
     for j in neighbourhoods.keys():

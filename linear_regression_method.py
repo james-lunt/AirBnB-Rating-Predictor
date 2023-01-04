@@ -56,16 +56,12 @@ model.fit(X_train,y_train)
 ypred = model.predict(X_test)
 print(mean_squared_error(y_test,ypred))
 
-"""from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsRegressor
 model = KNeighborsRegressor(n_neighbors=5,weights='uniform').fit(X_train,y_train)
 ypred = model.predict(X_test)
-print(mean_squared_error(y_test,ypred))"""
+print(mean_squared_error(y_test,ypred))
 
 from sklearn.dummy import DummyRegressor
 dummy = DummyRegressor(strategy="mean").fit(X_train, y_train)
 ypred = dummy.predict(X_test)
 print(mean_squared_error(y_test,ypred))
-
-
-
-

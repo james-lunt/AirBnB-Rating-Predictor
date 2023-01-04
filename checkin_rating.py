@@ -6,8 +6,8 @@ y = data.scores_checkin
 
 #Scatter plot of listing ratings
 plt.rc('font', size=10)
-plt.xlabel('Is superhost'); plt.ylabel('Cleanliness rating')
-plt.title('Cleanliness rating vs Superhost Status')
+plt.xlabel('Is superhost'); plt.ylabel('Checkin rating')
+plt.title('Checkin rating vs Superhost Status')
 plt.rcParams['figure.constrained_layout.use'] = True
 plt.scatter(x,y, color='green', s=2)
 plt.show()

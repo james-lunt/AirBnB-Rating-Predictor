@@ -1,8 +1,5 @@
 import data
 import matplotlib.pyplot as plt
-import math
-import numpy as np
-import csv
 
 id_to_accuracy = {id: score for id, score in zip(data.listings_id, data.scores_accuracy)}
 y = [id_to_accuracy[id] for id in data.reviews_listing_id]
